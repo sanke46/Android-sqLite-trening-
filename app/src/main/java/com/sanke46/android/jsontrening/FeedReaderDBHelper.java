@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ilafedoseev on 06.03.17.
  */
 
-public class FeedReaderDBHelper extends SQLiteOpenHelper {
+public class FeedReaderDBHelper extends SQLiteOpenHelper  {
 
     private static final int DATE_VEARSION = 1;
     private static final String DATE_NAME = "FeedReader.db";
@@ -19,7 +19,6 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL();
     }
 
     @Override
