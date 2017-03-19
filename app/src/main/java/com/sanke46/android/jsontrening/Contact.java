@@ -8,9 +8,29 @@ public class Contact {
     int id;
     String name;
     String phoneNumber;
+    int price;
+    int imgId;
+    String commentsAbout;
 
     public Contact(){
 
+    }
+
+    public Contact(String name, String phoneNumber, int price, int imgId,String commentsAbout){
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.price = price;
+        this.imgId = imgId;
+        this.commentsAbout = commentsAbout;
+    }
+
+    public Contact(int id, String name, String phoneNumber, int price, int imgId,String commentsAbout){
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.price = price;
+        this.imgId = imgId;
+        this.commentsAbout = commentsAbout;
     }
 
     public Contact(int id, String name){
@@ -45,6 +65,18 @@ public class Contact {
         return phoneNumber;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public int getImgId() {
+        return imgId;
+    }
+
+    public String getCommentsAbout() {
+        return commentsAbout;
+    }
+
     // ***********
     // SET methods
     // ***********
@@ -60,5 +92,17 @@ public class Contact {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setImgId(int imgId) {
+        this.imgId = imgId;
+    }
+
+    public void setCommentsAbout(String commentsAbout) {
+        this.commentsAbout = commentsAbout;
     }
 }

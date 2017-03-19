@@ -12,20 +12,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FeedReaderDBHelper db = new FeedReaderDBHelper(this);
+        FeedReaderDBHelper db2 = new FeedReaderDBHelper(this);
 
         System.out.println("Inserting...");
-        db.addContact(new Contact("Nina", "898100065"));
-        db.addContact(new Contact("ilya", "898100064"));
+        db2.addContact(new Contact("Nina", "898100065", 500, 2, "Something about this item"));
+        db2.addContact(new Contact("ilya", "898100064", 60, 32, "Something about this item2"));
         System.out.println("Reading all Contacts");
 
-        List<Contact> contacts = db.getAllContacts();
+        List<Contact> contacts = db2.getAllContacts();
         for(Contact cn : contacts){
-            String log = "Id: " + cn.getId() + ", Name: " + cn.getName() + ", Phone: " + cn.getPhoneNumber();
+            String log = "Id: " + cn.getId() + ", Name: " + cn.getName() + ", Phone: " + cn.getPhoneNumber() + ", Price: " + cn.getPrice() + ", ImgId: " + cn.getImgId() + ", Comments: " + cn.getCommentsAbout();
             System.out.println(log);
         }
-
-        db.deleteAll();
-
+        
     }
 }
