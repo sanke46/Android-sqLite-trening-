@@ -15,30 +15,30 @@ import java.util.List;
 
 public class FeedReaderDBHelper extends SQLiteOpenHelper implements IDatabaseHandler  {
 
-    private static final int DATE_VEARSION = 1;
-    private static final String DATE_NAME = "Contacts";
-    private static final String TABLE_CONTACT = "ContactsManager";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "contactsManager";
+    private static final String TABLE_CONTACTS = "contacts";
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
-    private static final String KEY_PHONE = "phone";
+    private static final String KEY_PH_NO = "phone_number";
 
     public FeedReaderDBHelper(Context context) {
-        super(context, DATE_NAME, null, DATE_VEARSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACT + "("
-                + KEY_ID + "INTEGER PRIMATY KEY,"
-                + KEY_NAME + "TEXT,"
-                + KEY_PHONE + "TEXT" + ")";
-
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_NAME + " TEXT,"
+                + KEY_PH_NO + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE ID EXISTS " + TABLE_CONTACT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+
         onCreate(db);
     }
 
@@ -47,55 +47,48 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper implements IDatabaseHan
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, contact.getName());
-        values.put(KEY_PHONE, contact.getPhoneNumber());
+        values.put(KEY_PH_NO, contact.getPhoneNumber());
 
-        db.insert(TABLE_CONTACT, null, values);
+        db.insert(TABLE_CONTACTS, null, values);
         db.close();
     }
 
     @Override
     public Contact getContact(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_CONTACT, new String[] {KEY_ID, KEY_NAME, KEY_PHONE}, KEY_ID + "=?",
-                new String[] {String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,
+                        KEY_NAME, KEY_PH_NO }, KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
 
-        if(cursor != null){
+        if (cursor != null){
             cursor.moveToFirst();
         }
 
-        Contact contact = new Contact(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2));
+        Contact contact = new Contact(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
+
         return contact;
     }
 
     @Override
     public List<Contact> getAllContacts() {
         List<Contact> contactList = new ArrayList<Contact>();
-        String selectQuery = "SELECT * FROM " + TABLE_CONTACT;
+        String selectQuery = "SELECT  * FROM " + TABLE_CONTACTS;
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery,null);
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 Contact contact = new Contact();
                 contact.setId(Integer.parseInt(cursor.getString(0)));
                 contact.setName(cursor.getString(1));
                 contact.setPhoneNumber(cursor.getString(2));
                 contactList.add(contact);
-            } while (cursor.moveToFirst());
+            } while (cursor.moveToNext());
         }
 
         return contactList;
-    }
-
-    @Override
-    public int getContactsCount() {
-        String countQuery = "SELECT * FROM " + TABLE_CONTACT;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery,null);
-
-        return cursor.getCount();
     }
 
     @Override
@@ -104,22 +97,33 @@ public class FeedReaderDBHelper extends SQLiteOpenHelper implements IDatabaseHan
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, contact.getName());
-        values.put(KEY_PHONE, contact.getPhoneNumber());
-        return db.update(TABLE_CONTACT, values,KEY_ID + " = ?",
-                new String[]{String.valueOf(contact.getId())});
+        values.put(KEY_PH_NO, contact.getPhoneNumber());
+
+        return db.update(TABLE_CONTACTS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(contact.getId()) });
     }
 
     @Override
     public void deleteContact(Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CONTACT, KEY_ID + " = ?", new String[] {String.valueOf(contact.getId())});
+        db.delete(TABLE_CONTACTS, KEY_ID + " = ?", new String[] { String.valueOf(contact.getId()) });
         db.close();
     }
 
     @Override
     public void deleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CONTACT,null,null);
+        db.delete(TABLE_CONTACTS, null, null);
         db.close();
+    }
+
+    @Override
+    public int getContactsCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_CONTACTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
     }
 }
