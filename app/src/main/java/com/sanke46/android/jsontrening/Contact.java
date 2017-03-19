@@ -7,7 +7,7 @@ package com.sanke46.android.jsontrening;
 public class Contact {
     int id;
     String name;
-    int phoneNumber;
+    String phoneNumber;
 
     public Contact(){
 
@@ -18,7 +18,7 @@ public class Contact {
         this.name = name;
     }
 
-    public Contact(int id, String name,int phoneNumber){
+    public Contact(int id, String name,String phoneNumber){
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -36,7 +36,7 @@ public class Contact {
         return name;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -53,7 +53,7 @@ public class Contact {
         this.name = name;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }
